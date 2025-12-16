@@ -3725,6 +3725,9 @@ CPanel CSailWorker::Zpanel( const CPanel &p1 ) const
  */
 CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &dispsail ) const
 {
+    std::cout << "=== LayoutSpinnaker START ===" << std::endl;
+    std::cout << "luffL = " << luffL << ", footL = " << footL << ", spinMaxWidth = " << spinMaxWidth << std::endl;
+    
     /* Create two temporary sails lay and dev */
     CPanelGroup lay(MAX_PANELS);  // 3D sail
     CPanelGroup dev(MAX_PANELS);  // developed sail
@@ -3768,10 +3771,14 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
     bool flag = false;
     unsigned int k = 0;
 
+    std::cout << "Starting panel loop: clothW=" << clothW << ", seamW=" << seamW << std::endl;
+    std::cout << "Port tack: " << spinnTackPort << ", Stbd tack: " << spinnTackStbd << ", Head: " << spinnHead << std::endl;
+
     for (npanel = 1; npanel < MAX_PANELS - 1 && !flag; npanel++)
     {
         // Calculate height for this panel seam
         real currentZ = p1[npanel-1].z() + clothW - seamW;
+        std::cout << "Panel " << npanel << ": currentZ=" << currentZ << ", headZ=" << spinnHead.z() << std::endl;
 
         if (currentZ >= spinnHead.z())
         {
@@ -3794,17 +3801,26 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
             if (heightRatio <= shoulderRatio)
             {
                 // From tack to shoulder: parabolic increase
-                real t = heightRatio / shoulderRatio;
-                // Use smoother curve for fuller shape
-                width = halfMaxWidth * sqrt(1 - (1-t)*(1-t));
+                real t = (shoulderRatio > 0) ? (heightRatio / shoulderRatio) : 0;
+                t = std::max(0.0, std::min(1.0, t));  // Clamp to [0,1]
+                real sqrtArg = 1 - (1-t)*(1-t);
+                sqrtArg = std::max(0.0, sqrtArg);  // Ensure non-negative
+                width = halfMaxWidth * sqrt(sqrtArg);
             }
             else
             {
                 // From shoulder to head: parabolic decrease with leech profile control
-                real t = (heightRatio - shoulderRatio) / (1.0 - shoulderRatio);
+                real denominator = 1.0 - shoulderRatio;
+                real t = (denominator > 0.001) ? ((heightRatio - shoulderRatio) / denominator) : 1.0;
+                t = std::max(0.0, std::min(1.0, t));  // Clamp to [0,1]
+                
                 // Use leechR to control fullness (positive = fuller, negative = flatter)
-                real leechFactor = 1.0 + (leechR / 1000.0);  // Scale leechR appropriately
-                width = halfMaxWidth * pow(1 - t*t, 1.0 / leechFactor);
+                real leechFactor = 1.0 + (leechR / 1000.0);
+                leechFactor = std::max(0.1, leechFactor);  // Prevent division by zero or negative
+                
+                real base = 1 - t*t;
+                base = std::max(0.0, base);  // Ensure non-negative
+                width = halfMaxWidth * pow(base, 1.0 / leechFactor);
             }
 
             // Apply asymmetry offset if configured
@@ -3815,6 +3831,8 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
             p2[npanel] = CPoint3d(center.x() + width + asymOffset, center.y(), currentZ);
             t1[npanel] = LuffIntersection;
             t2[npanel] = LeechIntersection;
+            
+            std::cout << "  heightRatio=" << heightRatio << ", width=" << width << ", p1=" << p1[npanel] << ", p2=" << p2[npanel] << std::endl;
         }
 
         // Create the panel
@@ -3837,9 +3855,22 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
         }
     }
 
+    std::cout << "Total panels created: " << (npanel-1) << std::endl;
+
     // Resize panel groups to actual number of panels
     lay.resize(npanel-1);
     dev.resize(npanel-1);
+    
+    // Debug: Check first panel
+    if (lay.size() > 0) {
+        std::cout << "First panel corners:" << std::endl;
+        std::cout << "  bottom[0]: " << lay[0].bottom[0] << std::endl;
+        std::cout << "  bottom[last]: " << lay[0].bottom[lay[0].bottom.size()-1] << std::endl;
+        std::cout << "  top[0]: " << lay[0].top[0] << std::endl;
+        std::cout << "  top[last]: " << lay[0].top[lay[0].top.size()-1] << std::endl;
+    }
+    
+    std::cout << "=== LayoutSpinnaker END ===" << std::endl;
 
     // Add hems
     for (unsigned int i = 0; i < lay.size(); i++)

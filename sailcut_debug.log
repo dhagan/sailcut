@@ -1,0 +1,26 @@
+=== LayoutSpinnaker START ===
+luffL = 6000, footL = 4500, spinMaxWidth = 9000
+Starting panel loop: clothW=900, seamW=13
+Port tack: -278	750	0, Stbd tack: 4222	750	0, Head: 1972	750	6000
+Panel 1: currentZ=887, headZ=6000
+Panel 2: currentZ=1774, headZ=6000
+Panel 3: currentZ=2661, headZ=6000
+Panel 4: currentZ=3548, headZ=6000
+Panel 5: currentZ=4435, headZ=6000
+Panel 6: currentZ=5322, headZ=6000
+Panel 7: currentZ=6209, headZ=6000
+Total panels created: 7
+=== LayoutSpinnaker END ===
+=== LayoutSpinnaker START ===
+luffL = 6000, footL = 4500, spinMaxWidth = 9000
+Starting panel loop: clothW=900, seamW=13
+Port tack: -278	750	0, Stbd tack: 4222	750	0, Head: 1972	750	6000
+Panel 1: currentZ=887, headZ=6000
+Panel 2: currentZ=1774, headZ=6000
+Panel 3: currentZ=2661, headZ=6000
+Panel 4: currentZ=3548, headZ=6000
+Panel 5: currentZ=4435, headZ=6000
+Panel 6: currentZ=5322, headZ=6000
+Panel 7: currentZ=6209, headZ=6000
+Total panels created: 7
+=== LayoutSpinnaker END ===
