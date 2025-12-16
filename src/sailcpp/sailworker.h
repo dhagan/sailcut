@@ -92,6 +92,8 @@ protected:
     CPanelGroup LayoutTriRadial( CPanelGroup &flatsail, CPanelGroup &dispsail ) const;
     /** The Wing cut layout of sail's panels. */
     CPanelGroup LayoutWing( CPanelGroup &flatsail, CPanelGroup &dispsail ) const;
+    /** The Spinnaker layout of sail's panels. */
+    CPanelGroup LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &dispsail ) const;
 
     /** The type of sail Edge for an intersection. */
     enumEdgeType Edge;

@@ -71,4 +71,10 @@ CSailDef::CSailDef()
     nbSections = 5;      // radial sections
     nbGores = 5;         // radial gores
     nbLuffGores = 2;   // luff gores
+
+    // Spinnaker parameters
+    spinMaxWidth = 5000;         // maximum width in millimetre
+    spinShoulderHeight = 60;     // shoulder position as percentage of luff (0-100)
+    spinTackHeight = 500;        // tack height above deck in millimetre
+    spinAsymmetry = 0;           // 0 for symmetric, positive for asymmetric
 }

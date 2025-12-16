@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SailCutSailDef>
+<SailDef version="1.3.5" fileVersion="1" >
+ <Sail>
+  <SailID>Test Spinnaker</SailID>
+  <SailType>SPINNAKER</SailType>
+  <SailCut>HORIZONTAL</SailCut>
+  <LOA>10000</LOA>
+  <Fore_I>10000</Fore_I>
+  <Fore_J>8000</Fore_J>
+  <Tack_X>0</Tack_X>
+  <Tack_Y>500</Tack_Y>
+  <Luff>12000</Luff>
+  <Rake>0</Rake>
+  <Gaff_deg>45</Gaff_deg>
+  <Gaff>3000</Gaff>
+  <Foot>10000</Foot>
+  <Leech>13000</Leech>
+  <LuffR>50</LuffR>
+  <LuffRP>50</LuffRP>
+  <GaffR>0</GaffR>
+  <GaffRP>50</GaffRP>
+  <LeechR>50</LeechR>
+  <LeechRP>50</LeechRP>
+  <FootR>100</FootR>
+  <FootRP>50</FootRP>
+  <ClothWidth>900</ClothWidth>
+  <SeamWidth>13</SeamWidth>
+  <LeechHemWidth>40</LeechHemWidth>
+  <FootHemWidth>30</FootHemWidth>
+  <OtherHemWidth>10</OtherHemWidth>
+  <Twist>0</Twist>
+  <SheetAngle>0</SheetAngle>
+  <DihedralAngle>168</DihedralAngle>
+  <RadialSections>5</RadialSections>
+  <HeadGores>5</HeadGores>
+  <LuffGores>2</LuffGores>
+  <SpinMaxWidth>7000</SpinMaxWidth>
+  <SpinShoulderHeight>60</SpinShoulderHeight>
+  <SpinTackHeight>500</SpinTackHeight>
+  <SpinAsymmetry>0</SpinAsymmetry>
+ </Sail>
+ <SailMould version="1" >
+  <Depth percent="5" />
+  <Profile name="depth profile" closed="0" >
+   <Entry y="0" x="0" />
+   <Entry y="1" x="0.17101007" />
+   <Entry y="2" x="0.5" />
+   <Entry y="3" x="0.82898993" />
+   <Entry y="4" x="1" />
+  </Profile>
+  <Profile name="top profile" closed="0" >
+   <Entry y="0" x="1" />
+   <Entry y="1" x="0.8" />
+   <Entry y="2" x="0.5" />
+   <Entry y="3" x="0.2" />
+   <Entry y="4" x="0" />
+  </Profile>
+  <Profile name="vertical profile" closed="0" >
+   <Entry y="0" x="0.5" />
+   <Entry y="1" x="0.5" />
+   <Entry y="2" x="0.5" />
+   <Entry y="3" x="0.5" />
+   <Entry y="4" x="0.5" />
+  </Profile>
+ </SailMould>
+</SailDef>

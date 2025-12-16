@@ -136,6 +136,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QRadioButton" name="radioSpinnaker">
+        <property name="text">
+         <string>Spinnaker</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="4">
        <widget class="QLabel" name="lbl4">
         <property name="text">

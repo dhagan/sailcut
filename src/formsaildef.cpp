@@ -99,6 +99,7 @@ CFormSailDef::CFormSailDef( QWidget* parent, CSailDef * sailptr )
     bgrpSailType->addButton( radioMainSail );
     bgrpSailType->addButton( radioJib );
     bgrpSailType->addButton( radioWing );
+    bgrpSailType->addButton( radioSpinnaker );
 
     // Create button group for sail cut.
     QButtonGroup *bgrpSailCut = new QButtonGroup( this );
@@ -170,6 +171,8 @@ enumSailType CFormSailDef::getSailType()
         return JIB;
     else if ( radioWing->isChecked() )
         return WING;
+    else if ( radioSpinnaker->isChecked() )
+        return SPINNAKER;
     else
         /* default */
         return MAINSAIL;
@@ -292,6 +295,33 @@ void CFormSailDef::setSailType( enumSailType type )
         radioRadial->setEnabled( false );
         radioTwist->setEnabled( false );
         radioVertical->setEnabled( false );
+        radioMitre->setEnabled( false );
+        radioMitre2->setEnabled( false );
+        break;
+
+    case SPINNAKER:
+#ifdef DEBUG
+        std::cout << "setSailType( SPINNAKER )" << std::endl;
+#endif
+        radioSpinnaker->setChecked( true );
+        txtTackDist->setEnabled( false );
+        txtTackHeight->setEnabled( true );
+        txtRake->setEnabled( false );
+
+        txtTriangBase->setEnabled( true );
+        txtTriangHoist->setEnabled( true );
+
+        txtGaffLen->setEnabled( false );
+        txtGaffRound->setEnabled( false );
+        txtGaffAngle->setEnabled( false );
+
+        txtDihedral->setEnabled( false );
+        radioHorizontal->setChecked( true );
+        radioCross->setEnabled( true );
+        radioHorizontal->setEnabled( true );
+        radioRadial->setEnabled( true );
+        radioTwist->setEnabled( false );
+        radioVertical->setEnabled( true );
         radioMitre->setEnabled( false );
         radioMitre2->setEnabled( false );
         break;

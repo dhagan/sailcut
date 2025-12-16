@@ -25,7 +25,7 @@
 
 
 // enumerated types
-enum enumSailType { MAINSAIL, JIB, WING };
+enum enumSailType { MAINSAIL, JIB, WING, SPINNAKER };
 enum enumSailCut { CROSS, TWIST, HORIZONTAL, VERTICAL, RADIAL, MITRE , MITRE2};
 
 
@@ -101,6 +101,15 @@ public:
     unsigned int nbGores;
     /** The number of luff gores */
     unsigned int nbLuffGores;
+
+    /** Spinnaker maximum width (shoulder width) in mm */
+    real spinMaxWidth;
+    /** Spinnaker shoulder height as percentage of luff */
+    real spinShoulderHeight;
+    /** Spinnaker tack height relative to deck in mm */
+    real spinTackHeight;
+    /** Spinnaker symmetry (0=symmetric, positive=asymmetric offset) */
+    real spinAsymmetry;
 
     /** The sail mould */
     CSailMould mould;
