@@ -3784,8 +3784,9 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
         }
         else
         {
-            // Calculate height ratio from bottom to top
-            real heightRatio = currentZ / luffL;
+            // Calculate height ratio from bottom to top (relative to tack height)
+            real heightFromTack = currentZ - center.z();
+            real heightRatio = heightFromTack / luffL;
             real shoulderRatio = spinShoulderHeight / 100.0;
             
             // Calculate horizontal width at this height using parabolic profile
