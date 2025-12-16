@@ -35,7 +35,7 @@ CSailDef::CSailDef()
     sailCut = CROSS;
     sailID = "Test sail 1";
 
-    LOA    = 7000;   // length of hull in millimetre
+    LOA    = 5050;   // length of hull in millimetre
     foreJ  = 2000;    // base of fore triangle
     foreI  = 6500;    // height of fore triangle
 

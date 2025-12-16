@@ -210,11 +210,19 @@ void CFormSail::slotDef()
     // that it can update it if necessary
     CSailDef defcopy = def;
 
-    if ( CFormSailDef(this , &defcopy).exec() )
+    CFormSailDef *dialog = new CFormSailDef(this, &defcopy);
+    
+    // Connect preview signal to update the sail
+    connect(dialog, &CFormSailDef::previewRequested, this, &CFormSail::setDef);
+    
+    // Show dialog and handle result
+    if (dialog->exec())
     {
         // we returned from the dialog with an 'OK',
         setDef(defcopy);
     }
+    
+    delete dialog;
 }
 
 

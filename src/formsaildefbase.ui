@@ -1081,6 +1081,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="btnPreview">
+       <property name="text">
+        <string>Preview</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btnOK">
        <property name="focusPolicy">
         <enum>Qt::StrongFocus</enum>

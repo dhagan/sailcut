@@ -115,6 +115,7 @@ CFormSailDef::CFormSailDef( QWidget* parent, CSailDef * sailptr )
     connect( btnOK, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( btnCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( btnCompute, SIGNAL( pressed() ), this, SLOT( slotCompute() ) );
+    connect( btnPreview, SIGNAL( clicked() ), this, SLOT( slotPreview() ) );
     connect( bgrpSailType, SIGNAL( buttonClicked(QAbstractButton *) ), this, SLOT( slotSailType() ) );
     connect( bgrpSailCut, SIGNAL( buttonClicked(QAbstractButton *) ), this, SLOT( slotSailCut() ) );
 
@@ -1241,6 +1242,67 @@ void CFormSailDef::slotCompute()
 
     // Display ancillary data in a message box.
     QMessageBox::information(this, "Sailcut", txta + "\n" + txtb + "\n" + txtc + "\n" + txtd + "\n" + txte);
+}
+
+
+/**
+ *  Preview the sail with current parameters without closing dialog.
+ *  Slot connected to Preview button.
+ */
+void CFormSailDef::slotPreview()
+{
+    // Save current form data to saildef
+    if (check())
+    {
+        saildef->sailID = txtSailID->text().toStdString();
+        saildef->sailCut = getSailCut();
+        saildef->sailType = getSailType();
+
+        saildef->LOA = txtLOA->text().toDouble();
+        saildef->foreJ = txtTriangBase->text().toDouble();
+        saildef->foreI = txtTriangHoist->text().toDouble();
+
+        saildef->clothW = txtClothWidth->text().toDouble();
+        saildef->seamW = txtSeamWidth->text().toDouble();
+        saildef->leechHemW = txtLeechHemWidth->text().toDouble();
+        saildef->footHemW = txtFootHemWidth->text().toDouble();
+        saildef->hemsW = txtHemsWidth->text().toDouble();
+
+        saildef->tackX = txtTackDist->text().toDouble();
+        saildef->tackY = txtTackHeight->text().toDouble();
+        saildef->rake = txtRake->text().toDouble();
+
+        saildef->luffL = txtLuffLen->text().toDouble();
+        saildef->luffR = txtLuffRound->text().toDouble();
+        saildef->luffRP = txtLuffRoundPos->text().toInt();
+
+        saildef->gaffDeg = txtGaffAngle->text().toDouble();
+        saildef->gaffL = txtGaffLen->text().toDouble();
+        saildef->gaffR = txtGaffRound->text().toDouble();
+
+        saildef->leechL = txtLeechLen->text().toDouble();
+        saildef->leechR = txtLeechRound->text().toDouble();
+        saildef->leechRP = txtLeechRoundPos->text().toInt();
+
+        saildef->footL = txtFootLen->text().toDouble();
+        saildef->footR = txtFootRound->text().toDouble();
+
+        saildef->mould.profile[2].setDepth(txtTopDepth->text().toDouble()/100);
+        saildef->mould.profile[1].setDepth(txtMidDepth->text().toDouble()/100);
+        saildef->mould.profile[0].setDepth(txtFootDepth->text().toDouble()/100);
+
+        saildef->twistDeg = txtTwistAngle->text().toDouble();
+        saildef->sheetDeg = txtSheetAngle->text().toDouble();
+
+        saildef->nbSections = txtSections->text().toUInt();
+        saildef->nbGores = txtGores->text().toUInt();
+        saildef->nbLuffGores = txtLuffGores->text().toUInt();
+
+        saildef->dihedralDeg = txtDihedral->text().toDouble();
+
+        // Emit signal to parent to update the preview
+        emit previewRequested(*saildef);
+    }
 }
 
 

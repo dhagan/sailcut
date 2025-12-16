@@ -47,10 +47,14 @@ public:
 
     virtual void accept();
 
+signals:
+    void previewRequested(const CSailDef&);
+
 protected slots:
     void slotSailCut();
     void slotSailType();
     void slotCompute();
+    void slotPreview();
 
 protected:
     /** A pointer to the sail definion */
