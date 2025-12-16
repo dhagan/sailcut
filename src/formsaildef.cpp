@@ -325,6 +325,12 @@ void CFormSailDef::setSailType( enumSailType type )
         radioVertical->setEnabled( true );
         radioMitre->setEnabled( false );
         radioMitre2->setEnabled( false );
+        
+        // Set spinnaker-specific default values
+        txtLuffLen->setText( QString::number(6000) );    // 6000mm luff
+        txtLeechLen->setText( QString::number(6000) );   // 6000mm leech (symmetric)
+        txtFootLen->setText( QString::number(4500) );    // 4500mm foot
+        txtLeechRound->setText( QString::number(100) );  // Positive for fuller shape
         break;
 
     }
