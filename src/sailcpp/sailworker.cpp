@@ -3841,8 +3841,14 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
         lay[npanel-1].bottom.fill(p1[npanel-1], p2[npanel-1]);
         lay[npanel-1].top.fill(p1[npanel], p2[npanel]);
 
-        // Add sail depth using mould
+        // Debug: Check panel before Zpanel
+        std::cout << "  Panel " << (npanel-1) << " BEFORE Zpanel: bottom[0].z=" << lay[npanel-1].bottom[0].z() << std::endl;
+
+        // Add sail depth using mould - spinnakers use mould differently
+        // For horizontal panels, Zpanel adds depth perpendicular to the panel
         lay[npanel-1] = Zpanel(lay[npanel-1]);
+        
+        std::cout << "  Panel " << (npanel-1) << " AFTER Zpanel: bottom[0].z=" << lay[npanel-1].bottom[0].z() << std::endl;
 
         // Develop the panel
         if (npanel == 1)

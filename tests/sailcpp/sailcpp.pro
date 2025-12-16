@@ -9,4 +9,6 @@ SOURCES += \
     ../../src/geocpp/vector.cpp \
     ../../src/sailcpp/panel.cpp \
     ../../src/sailcpp/sailcalc.cpp \
+    ../../src/sailcpp/saildef.cpp \
+    ../../src/sailcpp/sailworker.cpp \
     tst_sailcpp.cpp
