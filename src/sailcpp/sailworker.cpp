@@ -3733,8 +3733,6 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
     CPanelGroup dev(MAX_PANELS);  // developed sail
 
     unsigned int npanel = 1;
-    unsigned int npl = lay[0].right.size();   // number of right/left points
-    unsigned int npb = lay[0].bottom.size();  // number of bottom/top points
 
     /* For a symmetric spinnaker, we create a sail with:
      * - Two tacks (port and starboard) at equal distance from centerline
@@ -3753,23 +3751,18 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
     CPoint3d spinnTackStbd(center.x() + halfFootWidth, center.y(), center.z());   // Starboard tack
     CPoint3d spinnHead(center.x(), center.y(), center.z() + luffL);  // Head at centerline
 
-    // Calculate shoulder position and maximum half-width
-    real shoulderHeight = luffL * spinShoulderHeight / 100.0;
+    // Calculate maximum half-width
     real halfMaxWidth = spinMaxWidth / 2.0;
 
     /* Create arrays for panel endpoints */
     CPoint3d p1[MAX_PANELS], p2[MAX_PANELS];  // left (port) and right (starboard) edges
-    IntersectionType t1[MAX_PANELS], t2[MAX_PANELS];
 
     // Start from the bottom (tack to tack)
     p1[0] = spinnTackPort;
     p2[0] = spinnTackStbd;
-    t1[0] = FootIntersection;
-    t2[0] = FootIntersection;
 
     /* Create horizontal panels from tacks up to head */
     bool flag = false;
-    unsigned int k = 0;
 
     std::cout << "Starting panel loop: clothW=" << clothW << ", seamW=" << seamW << std::endl;
     std::cout << "Port tack: " << spinnTackPort << ", Stbd tack: " << spinnTackStbd << ", Head: " << spinnHead << std::endl;
@@ -3786,8 +3779,6 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
             flag = true;
             p1[npanel] = spinnHead;
             p2[npanel] = spinnHead;
-            t1[npanel] = LuffIntersection;
-            t2[npanel] = LeechIntersection;
         }
         else
         {
@@ -3829,8 +3820,6 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
             // Create symmetric points from centerline
             p1[npanel] = CPoint3d(center.x() - width + asymOffset, center.y(), currentZ);
             p2[npanel] = CPoint3d(center.x() + width + asymOffset, center.y(), currentZ);
-            t1[npanel] = LuffIntersection;
-            t2[npanel] = LeechIntersection;
             
             std::cout << "  heightRatio=" << heightRatio << ", width=" << width << ", p1=" << p1[npanel] << ", p2=" << p2[npanel] << std::endl;
         }
