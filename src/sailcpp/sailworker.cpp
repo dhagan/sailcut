@@ -3733,33 +3733,38 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
     unsigned int npl = lay[0].right.size();   // number of right/left points
     unsigned int npb = lay[0].bottom.size();  // number of bottom/top points
 
-    /* For a spinnaker, we create a symmetric sail with:
-     * - Tack at origin
-     * - Head directly above tack at luffL height
-     * - Clew at footL distance from tack
-     * - Maximum width at spinShoulderHeight percent of luff
+    /* For a symmetric spinnaker, we create a sail with:
+     * - Two tacks (port and starboard) at equal distance from centerline
+     * - Head at the top center
+     * - Luff and leech are mirror images (symmetric)
+     * - Maximum width at spinShoulderHeight percent of luff height
+     * - Leech profile controlled by leechR parameter for fuller shape
      */
 
-    // Define the three corners of the spinnaker
-    CPoint3d spinnTack = tack;  // Use existing tack point
-    CPoint3d spinnHead(tack.x(), tack.y(), tack.z() + luffL);  // Head directly above tack
-    CPoint3d spinnClew(tack.x() + footL, tack.y(), tack.z());  // Clew at foot length
+    // Define centerline position
+    CPoint3d center = tack;  // Center point at deck level
+    real halfFootWidth = footL / 2.0;  // Half the foot width
+    
+    // Define the three corners of the symmetric spinnaker
+    CPoint3d spinnTackPort(center.x() - halfFootWidth, center.y(), center.z());   // Port tack
+    CPoint3d spinnTackStbd(center.x() + halfFootWidth, center.y(), center.z());   // Starboard tack
+    CPoint3d spinnHead(center.x(), center.y(), center.z() + luffL);  // Head at centerline
 
-    // Calculate shoulder position (point of maximum width)
-    real shoulderZ = tack.z() + (luffL * spinShoulderHeight / 100.0);
+    // Calculate shoulder position and maximum half-width
+    real shoulderHeight = luffL * spinShoulderHeight / 100.0;
     real halfMaxWidth = spinMaxWidth / 2.0;
 
     /* Create arrays for panel endpoints */
-    CPoint3d p1[MAX_PANELS], p2[MAX_PANELS];  // left and right edges
+    CPoint3d p1[MAX_PANELS], p2[MAX_PANELS];  // left (port) and right (starboard) edges
     IntersectionType t1[MAX_PANELS], t2[MAX_PANELS];
 
-    // Start from the bottom (tack to clew)
-    p1[0] = spinnTack;
-    p2[0] = spinnClew;
+    // Start from the bottom (tack to tack)
+    p1[0] = spinnTackPort;
+    p2[0] = spinnTackStbd;
     t1[0] = FootIntersection;
     t2[0] = FootIntersection;
 
-    /* Create horizontal panels from tack/clew up to head */
+    /* Create horizontal panels from tacks up to head */
     bool flag = false;
     unsigned int k = 0;
 
@@ -3779,30 +3784,34 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
         }
         else
         {
-            // Calculate width at this height using parabolic curve
-            // Width varies from 0 at tack, to spinMaxWidth at shoulder, back to 0 at head
-            real heightRatio = (currentZ - tack.z()) / luffL;
+            // Calculate height ratio from bottom to top
+            real heightRatio = currentZ / luffL;
             real shoulderRatio = spinShoulderHeight / 100.0;
             
+            // Calculate horizontal width at this height using parabolic profile
             real width;
             if (heightRatio <= shoulderRatio)
             {
                 // From tack to shoulder: parabolic increase
                 real t = heightRatio / shoulderRatio;
-                width = halfMaxWidth * (1 - (1-t)*(1-t));
+                // Use smoother curve for fuller shape
+                width = halfMaxWidth * sqrt(1 - (1-t)*(1-t));
             }
             else
             {
-                // From shoulder to head: parabolic decrease
+                // From shoulder to head: parabolic decrease with leech profile control
                 real t = (heightRatio - shoulderRatio) / (1.0 - shoulderRatio);
-                width = halfMaxWidth * (1 - t*t);
+                // Use leechR to control fullness (positive = fuller, negative = flatter)
+                real leechFactor = 1.0 + (leechR / 1000.0);  // Scale leechR appropriately
+                width = halfMaxWidth * pow(1 - t*t, 1.0 / leechFactor);
             }
 
-            // Add asymmetry offset
+            // Apply asymmetry offset if configured
             real asymOffset = spinAsymmetry * heightRatio;
 
-            p1[npanel] = CPoint3d(spinnTack.x() - width + asymOffset, spinnTack.y(), currentZ);
-            p2[npanel] = CPoint3d(spinnTack.x() + width + asymOffset, spinnTack.y(), currentZ);
+            // Create symmetric points from centerline
+            p1[npanel] = CPoint3d(center.x() - width + asymOffset, center.y(), currentZ);
+            p2[npanel] = CPoint3d(center.x() + width + asymOffset, center.y(), currentZ);
             t1[npanel] = LuffIntersection;
             t2[npanel] = LeechIntersection;
         }
@@ -3816,11 +3825,15 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
         // Add sail depth using mould
         lay[npanel-1] = Zpanel(lay[npanel-1]);
 
-        // Development
-        dev[npanel-1].left = lay[npanel-1].left.develop();
-        dev[npanel-1].right = lay[npanel-1].right.develop();
-        dev[npanel-1].top = lay[npanel-1].top.develop();
-        dev[npanel-1].bottom = lay[npanel-1].bottom.develop();
+        // Develop the panel
+        if (npanel == 1)
+        {
+            dev[npanel-1] = lay[npanel-1].develop(ALIGN_TOP);
+        }
+        else
+        {
+            dev[npanel-1] = lay[npanel-1].develop(ALIGN_BOTTOM);
+        }
     }
 
     // Resize panel groups to actual number of panels
@@ -3833,21 +3846,17 @@ CPanelGroup CSailWorker::LayoutSpinnaker( CPanelGroup &flatsail, CPanelGroup &di
         if (i == 0)
         {
             // Bottom panel gets foot hem
-            dev[i].bottom.cutLeft = footHemW;
-            dev[i].bottom.cutRight = footHemW;
+            dev[i].cutBottom = footHemW;
         }
         if (i == lay.size() - 1)
         {
             // Top panel gets head hem
-            dev[i].top.cutLeft = hemsW;
-            dev[i].top.cutRight = hemsW;
+            dev[i].cutTop = hemsW;
         }
         
         // Side hems
-        dev[i].left.cutLeft = (i == 0) ? hemsW : seamW;
-        dev[i].left.cutRight = hemsW;
-        dev[i].right.cutLeft = hemsW;
-        dev[i].right.cutRight = (i == 0) ? hemsW : seamW;
+        dev[i].cutLeft = (i == 0) ? hemsW : seamW;
+        dev[i].cutRight = (i == 0) ? hemsW : seamW;
     }
 
     // Copy developed sail to output parameters
