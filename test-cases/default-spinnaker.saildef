@@ -10,12 +10,12 @@
   <Fore_J>8000</Fore_J>
   <Tack_X>0</Tack_X>
   <Tack_Y>500</Tack_Y>
-  <Luff>12000</Luff>
+  <Luff>6000</Luff>
   <Rake>0</Rake>
   <Gaff_deg>45</Gaff_deg>
   <Gaff>3000</Gaff>
-  <Foot>10000</Foot>
-  <Leech>13000</Leech>
+  <Foot>4500</Foot>
+  <Leech>6000</Leech>
   <LuffR>50</LuffR>
   <LuffRP>50</LuffRP>
   <GaffR>0</GaffR>
@@ -35,7 +35,7 @@
   <RadialSections>5</RadialSections>
   <HeadGores>5</HeadGores>
   <LuffGores>2</LuffGores>
-  <SpinMaxWidth>7000</SpinMaxWidth>
+  <SpinMaxWidth>9000</SpinMaxWidth>
   <SpinShoulderHeight>60</SpinShoulderHeight>
   <SpinTackHeight>500</SpinTackHeight>
   <SpinAsymmetry>0</SpinAsymmetry>

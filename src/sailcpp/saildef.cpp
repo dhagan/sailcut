@@ -41,12 +41,12 @@ CSailDef::CSailDef()
 
     tackX  = 1972;    // longitudinal distance of main sail tack from stem in millimetre
     tackY  = 750;     // height of sail tack above stem in millimetre
-    luffL  = 6250;    // in millimetre
+    luffL  = 6000;    // in millimetre (for spinnaker: leech length)
     rake   = 161;     // in millimetre
     gaffDeg= 45;     // in degree
     gaffL  = 2500;   // in millimetre
-    leechL = 8220;   // in millimetre
-    footL  = 4100;   // in millimetre
+    leechL = 6000;   // in millimetre (for spinnaker: same as luff for symmetry)
+    footL  = 4500;   // in millimetre (for spinnaker: foot length)
 
     luffR  = 67;     // in millimetre // NOTE: Positive value for mast bend Negative for headstay sag
     luffRP = 50;      // in percent of luff length
@@ -73,7 +73,7 @@ CSailDef::CSailDef()
     nbLuffGores = 2;   // luff gores
 
     // Spinnaker parameters
-    spinMaxWidth = 5000;         // maximum width in millimetre
+    spinMaxWidth = 9000;         // maximum width in millimetre (half width = 4500mm)
     spinShoulderHeight = 60;     // shoulder position as percentage of luff (0-100)
     spinTackHeight = 500;        // tack height above deck in millimetre
     spinAsymmetry = 0;           // 0 for symmetric, positive for asymmetric
